@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio SaZ - Ultimate Zumba Application</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        zumbaPurple: '#4c1d95',
+                        zumbaPink: '#db2777',
+                        zumbaOrange: '#f97316',
+                        zumbaDark: '#090514',
+                        zumbaCard: '#160f29'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neon-pink-glow { box-shadow: 0 0 20px rgba(219, 39, 119, 0.5); }
+        .neon-purple-glow { box-shadow: 0 0 20px rgba(76, 29, 149, 0.6); }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #090514; }
+        ::-webkit-scrollbar-thumb { background: #db2777; border-radius: 10px; }
+        
+        /* Premium iOS Dynamic Island animation */
+        .dynamic-island {
+            width: 110px;
+            height: 25px;
+            background-color: black;
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .dynamic-island:hover {
+            width: 260px;
+            height: 35px;
+        }
+
+        /* Pulsing neon effect for the zumba logo */
+        .neon-pulse-logo {
+            animation: neonPulse 2s infinite alternate;
+        }
+        @keyframes neonPulse {
+            0% { filter: drop-shadow(0 0 2px #db2777); }
+            100% { filter: drop-shadow(0 0 12px #db2777) drop-shadow(0 0 20px #f97316); }
+        }
+
+        /* Rotational animation for Music Player Vinyl Disc */
+        .spinning-vinyl {
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-zumbaDark text-white font-sans min-h-screen flex justify-center items-center p-0 sm:p-4">
+
+    <!-- Hidden File Inputs for Local Upload Engines -->
+    <input type="file" id="avatar-file-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+    <input type="file" id="song-file-input" accept="audio/*" class="hidden" onchange="handleSongUpload(event)">
+    <input type="file" id="video-file-input" accept="video/*" class="hidden" onchange="handleVideoUpload(event)">
+
+    <!-- iOS Premium Mobile Device Mockup Container -->
+    <div class="w-full max-w-md bg-zumbaDark sm:rounded-[55px] sm:border-[12px] sm:border-neutral-800 min-h-screen sm:min-h-[880px] flex flex-col justify-between relative overflow-hidden neon-purple-glow">
+        
+        <!-- Premium iOS Status Bar & Dynamic Island Simulation -->
+        <div class="w-full bg-black/40 text-[11px] text-white/90 px-6 py-2 flex justify-between items-center z-50">
+            <span class="font-bold">10:13</span>
+            <!-- Dynamic Island -->
+            <div class="dynamic-island flex items-center justify-center text-[9px] font-bold text-zumbaPink cursor-pointer group">
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">⚡ Studio SaZ Live Syncing</span>
+            </div>
+            <div class="flex items-center space-x-1.5">
+                <i class="fas fa-signal"></i>
+                <span class="font-bold">5G</span>
+                <i class="fas fa-battery-full text-sm text-green-500"></i>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             1. SPLASH SCREEN (Zumba energetic logo & animations)
+             ========================================================= -->
+        <div id="page-splash" class="absolute inset-0 bg-gradient-to-br from-zumbaDark via-zumbaPurple to-zumbaPink z-50 flex flex-col items-center justify-center transition-all duration-700">
+            <!-- Pulsing Zumba Icon (Clickable to change image) -->
+            <div onclick="triggerAvatarSelection()" class="w-28 h-28 rounded-full bg-white p-1 mb-2 shadow-2xl relative overflow-hidden flex items-center justify-center cursor-pointer group">
+                <img id="splash-avatar" src="sasani.jpg" class="w-full h-full object-cover rounded-full" alt="Sasani Fernando" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';">
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-[10px] text-white font-bold"><i class="fas fa-camera mr-1"></i>Change</span>
+                </div>
+            </div>
+            <p class="text-[9px] text-white/60 mb-3 uppercase tracking-wider"><i class="fas fa-hand-pointer mr-1"></i>Click image to upload photo</p>
+            
+            <h1 class="text-3xl font-black tracking-wider text-white">STUDIO SaZ</h1>
+            <p class="text-xs uppercase tracking-widest text-zumbaOrange font-bold mt-1">Zumba Fitness Club</p>
+            <div class="mt-8 flex space-x-1 justify-center">
+                <div class="w-2.5 h-2.5 bg-white rounded-full animate-ping"></div>
+            </div>
+            <button onclick="dismissSplash()" class="mt-12 bg-white text-zumbaPurple text-xs font-black px-8 py-3 rounded-full uppercase tracking-wider shadow-lg hover:scale-105 transition-all">
+                Enter App
+            </button>
+        </div>
+
+        <!-- Notification Alert Toast Banner -->
+        <div id="app-toast" class="absolute top-12 left-4 right-4 bg-gradient-to-r from-zumbaPink to-zumbaOrange p-3.5 rounded-2xl shadow-2xl z-40 transform -translate-y-96 transition-transform duration-500 flex items-center space-x-3">
+            <i class="fas fa-bell text-lg animate-swing"></i>
+            <p class="text-xs font-bold" id="toast-msg">Welcome back to Studio SaZ!</p>
+        </div>
+
+        <!-- =========================================================
+             VIDEO STREAMING INTERACTIVE POPUP PLAYER
+             ========================================================= -->
+        <div id="video-overlay-player" class="absolute inset-0 bg-black/95 z-50 flex flex-col justify-center p-4 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-black text-zumbaPink uppercase" id="current-playing-title">Playing Session</h3>
+                <button onclick="closeVideoPlayer()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-brandPink">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Dynamic Video Element with fallback -->
+            <div class="w-full aspect-video bg-neutral-900 rounded-2xl overflow-hidden shadow-2xl relative border border-white/10">
+                <video id="main-app-video" class="w-full h-full" controls>
+                    <source id="video-source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="mt-4 p-4 bg-zumbaCard rounded-2xl border border-white/5">
+                <p class="text-xs text-gray-300" id="current-playing-desc">Enjoy your workout with Studio SaZ expert choreography guides.</p>
+            </div>
+        </div>
+
+        <!-- App Header (Visible after Splash screen) -->
+        <header id="app-header" class="p-5 flex justify-between items-center bg-zumbaCard/50 border-b border-white/5 z-20 hidden">
+            <div class="flex items-center space-x-3">
+                <div onclick="triggerAvatarSelection()" class="w-11 h-11 rounded-full bg-gradient-to-r from-zumbaPink to-zumbaOrange p-0.5 relative overflow-hidden flex items-center justify-center cursor-pointer group">
+                    <img src="sasani.jpg" id="user-avatar-main" class="w-full h-full object-cover rounded-full" alt="Sasani Fernando" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i class="fas fa-camera text-[10px] text-white"></i>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-white" id="header-user-name">Sasani Fernando</h2>
+                    <p class="text-[10px] text-zumbaOrange font-extrabold flex items-center" id="header-user-badge">
+                        <i class="fas fa-award mr-1"></i> ZIN™ Certified Instructor
+                    </p>
+                </div>
+            </div>
+            <button onclick="showPage('instructor')" class="bg-white/10 hover:bg-zumbaPink text-white text-[10px] font-black px-3 py-2 rounded-xl transition-all uppercase tracking-wider">
+                <i class="fas fa-user-shield mr-1"></i> Panel
+            </button>
+        </header>
+
+        <!-- MAIN APP DISPLAY CANVAS -->
+        <main class="flex-1 overflow-y-auto px-4 py-4 pb-24 z-10 hidden" id="main-app-content">
+
+            <!-- =========================================================
+                 2. LOGIN / REGISTER PAGE
+                 ========================================================= -->
+            <section id="page-login" class="space-y-6 pt-3">
+                <div class="flex flex-col items-center justify-center text-center">
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-zumbaPurple to-zumbaPink flex items-center justify-center text-white text-4xl mb-3 neon-pulse-logo shadow-lg">
+                        <i class="fas fa-running animate-bounce text-zumbaOrange"></i>
+                    </div>
+                    <h2 class="text-2xl font-black">Register Account</h2>
+                    <p class="text-xs text-gray-400">Join Studio SaZ Zumba Fitness Club</p>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="simulateSocialLogin('Google')" class="w-full bg-white text-gray-800 text-xs font-bold py-3 rounded-xl flex items-center justify-center space-x-2 shadow">
+                        <i class="fab fa-google text-red-500 text-base"></i> <span>Continue with Google</span>
+                    </button>
+                </div>
+                <div class="flex items-center my-3">
+                    <hr class="flex-1 border-white/10"> <span class="px-3 text-xs text-gray-500">OR</span> <hr class="flex-1 border-white/10">
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Full Name</label>
+                        <input type="text" id="login-name" class="w-full bg-zumbaCard border border-white/10 rounded-xl p-3 text-xs focus:outline-none focus:border-zumbaPink" value="Sasani Fernando">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Email Address</label>
+                        <input type="email" id="login-email" class="w-full bg-zumbaCard border border-white/10 rounded-xl p-3 text-xs focus:outline-none focus:border-zumbaPink" value="zinsasanifernando@gmail.com">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Age (Yrs)</label>
+                            <input type="number" id="login-age" class="w-full bg-zumbaCard border border-white/10 rounded-xl p-3 text-xs focus:outline-none focus:border-zumbaPink" value="24">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Weight (Kg)</label>
+                            <input type="number" id="login-weight" class="w-full bg-zumbaCard border border-white/10 rounded-xl p-3 text-xs focus:outline-none focus:border-zumbaPink" value="55">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Fitness Goal</label>
+                        <select id="login-goal" class="w-full bg-zumbaCard border border-white/10 rounded-xl p-3 text-xs text-gray-300 focus:outline-none">
+                            <option>Zumba Fitness & Stamina</option>
+                            <option>Cardio Weight Loss</option>
+                            <option>Body Flexibility & Stretching</option>
+                        </select>
+                    </div>
+                    <button onclick="handleRegistration()" class="w-full bg-gradient-to-r from-zumbaPink to-zumbaOrange text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg neon-pink-glow">
+                        Register & Enter Dashboard
+                    </button>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 3. HOME SCREEN
+                 ========================================================= -->
+            <section id="page-home" class="hidden space-y-5">
+                <div class="relative bg-gradient-to-tr from-zumbaPurple to-zumbaPink p-5 rounded-3xl overflow-hidden neon-pink-glow">
+                    <div class="absolute right-[-10px] bottom-[-20px] opacity-10 text-9xl font-black">Z</div>
+                    <h3 class="text-xl font-black leading-tight">Ready to Burn <br>Some Calories?</h3>
+                    <p class="text-xs text-purple-200 mt-1">Today's Class starts at 07:30 PM</p>
+                    <button onclick="showPage('tracker')" class="mt-4 bg-zumbaOrange hover:bg-white text-white hover:text-zumbaDark font-black text-xs px-5 py-2.5 rounded-xl uppercase tracking-wider transition-all">
+                        <i class="fas fa-play mr-1"></i> Start Workout
+                    </button>
+                </div>
+
+                <!-- Daily Tracker Widgets -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 text-center">
+                        <i class="fas fa-fire text-zumbaOrange text-xl mb-1"></i>
+                        <p class="text-[10px] uppercase text-gray-400 font-bold">Burned Today</p>
+                        <h4 class="text-xl font-black text-white" id="home-kcal-display">450 kcal</h4>
+                    </div>
+                    <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 text-center">
+                        <i class="fas fa-calendar-check text-zumbaPink text-xl mb-1"></i>
+                        <p class="text-[10px] uppercase text-gray-400 font-bold">Attendance</p>
+                        <h4 class="text-xl font-black text-white">12 Sessions</h4>
+                    </div>
+                </div>
+
+                <!-- Live Audio Music Player Widget -->
+                <div class="bg-zumbaCard p-5 rounded-3xl border border-white/5 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black uppercase text-zumbaOrange tracking-wider">Zumba Beat Player</span>
+                        <div class="flex items-center space-x-1" id="music-bars">
+                            <span class="w-1 h-3 bg-zumbaPink rounded-full"></span>
+                            <span class="w-1 h-5 bg-zumbaOrange rounded-full"></span>
+                            <span class="w-1 h-4 bg-zumbaPink rounded-full"></span>
+                            <span class="w-1 h-2 bg-zumbaOrange rounded-full"></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div id="music-disc" class="w-14 h-14 bg-neutral-900 border-4 border-neutral-800 rounded-full flex items-center justify-center text-zumbaPink relative shadow-lg">
+                            <i class="fas fa-compact-disc text-3xl"></i>
+                            <div class="w-3 h-3 bg-brandDark rounded-full absolute center"></div>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold" id="current-track-name">Salsa Heat Dance Beat</h4>
+                            <p class="text-[10px] text-gray-400" id="current-track-bpm">Tempo: 130 BPM (Zumba Sync)</p>
+                            <audio id="zumba-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" onplay="onAudioPlay()" onpause="onAudioPause()"></audio>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center bg-black/40 px-4 py-2.5 rounded-xl border border-white/5">
+                        <button onclick="changeTrack('prev')" class="text-gray-400 hover:text-white"><i class="fas fa-backward"></i></button>
+                        <button onclick="toggleAudio()" class="w-9 h-9 rounded-full bg-zumbaPink text-white flex items-center justify-center shadow-md hover:scale-105 transition-all">
+                            <i id="audio-play-icon" class="fas fa-play ml-0.5"></i>
+                        </button>
+                        <button onclick="changeTrack('next')" class="text-gray-400 hover:text-white"><i class="fas fa-forward"></i></button>
+                    </div>
+
+                    <!-- MP3 File Uploader -->
+                    <button onclick="triggerSongSelection()" class="w-full bg-brandDark border border-dashed border-zumbaPink/30 hover:border-zumbaPink/100 py-3 rounded-2xl text-[11px] text-zumbaPink font-extrabold flex items-center justify-center space-x-2 transition-all">
+                        <i class="fas fa-music text-sm"></i>
+                        <span>Upload Your Zumba Song (.mp3)</span>
+                    </button>
+                </div>
+
+                <!-- Featured Section -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xs uppercase tracking-wider text-zumbaOrange font-black">Featured Lessons</h4>
+                        <button onclick="showPage('videos')" class="text-[10px] text-zumbaPink font-bold hover:underline">See All</button>
+                    </div>
+                    <div onclick="playVideo('Latin Beat Rhythm Warmup', 'https://www.w3schools.com/html/mov_bbb.mp4', 'Energetic warmup session designed for basic step coordinations.')" class="bg-zumbaCard p-3 rounded-2xl border border-white/5 flex items-center space-x-3 cursor-pointer hover:bg-zumbaCard/80 transition-all">
+                        <div class="w-20 h-14 bg-purple-950 rounded-xl flex items-center justify-center text-white relative">
+                            <i class="fas fa-play text-xs"></i>
+                            <span class="absolute bottom-1 right-1 bg-black text-[8px] px-1 rounded">00:10</span>
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-xs font-bold">Latin Beat Rhythm Warmup</h5>
+                            <p class="text-[10px] text-gray-400">Beginner • 450 kcal burn</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 4. VIDEO LIBRARY
+                 ========================================================= -->
+            <section id="page-videos" class="hidden space-y-4">
+                <div>
+                    <h3 class="text-xl font-black">Video Lessons</h3>
+                    <p class="text-xs text-gray-400">Stream workouts anywhere, anytime.</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex space-x-2 overflow-x-auto pb-1">
+                    <span class="bg-zumbaPink text-white text-[10px] font-bold px-3 py-1.5 rounded-full whitespace-nowrap">All Videos</span>
+                    <span class="bg-zumbaCard text-gray-400 text-[10px] font-bold px-3 py-1.5 rounded-full whitespace-nowrap">Warm-up</span>
+                    <span class="bg-zumbaCard text-gray-400 text-[10px] font-bold px-3 py-1.5 rounded-full whitespace-nowrap">Live Replays</span>
+                </div>
+
+                <!-- Video Cards Container -->
+                <div id="video-list-container" class="space-y-3">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 5. CLASS SCHEDULES (Booking Screen)
+                 ========================================================= -->
+            <section id="page-booking" class="hidden space-y-4">
+                <div>
+                    <h3 class="text-xl font-black">Class Schedule</h3>
+                    <p class="text-xs text-gray-400">Reserve your spots for upcoming sessions.</p>
+                </div>
+
+                <!-- Dynamic Booking List Container -->
+                <div id="booking-list-container" class="space-y-3">
+                    <!-- Populated and managed dynamically -->
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 6. STUDENTS REGISTRY & DIRECTORY (Members Tab)
+                 ========================================================= -->
+            <section id="page-members" class="hidden space-y-4">
+                <div>
+                    <h3 class="text-xl font-black">Student Directory</h3>
+                    <p class="text-xs text-gray-400">Manage active participants, newcomers & archives.</p>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="space-y-3">
+                    <div class="relative">
+                        <input type="text" id="member-search" onkeyup="filterMembers()" placeholder="Search by name, number or ID..." class="w-full bg-zumbaCard border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-zumbaPink">
+                        <span class="absolute left-3.5 top-3 text-gray-400 text-xs"><i class="fas fa-search"></i></span>
+                    </div>
+                    <!-- Updated Filter Tabs with Archived Option -->
+                    <div class="flex space-x-1 bg-zumbaCard p-1 rounded-xl border border-white/5">
+                        <button id="filter-all" onclick="setMemberFilter('all')" class="flex-1 py-1.5 text-[9px] font-extrabold rounded-lg transition-all bg-zumbaPink text-white">All</button>
+                        <button id="filter-active" onclick="setMemberFilter('active')" class="flex-1 py-1.5 text-[9px] font-extrabold rounded-lg transition-all text-gray-400">Active</button>
+                        <button id="filter-newcomer" onclick="setMemberFilter('newcomer')" class="flex-1 py-1.5 text-[9px] font-extrabold rounded-lg transition-all text-gray-400">New</button>
+                        <button id="filter-archived" onclick="setMemberFilter('archived')" class="flex-1 py-1.5 text-[9px] font-extrabold rounded-lg transition-all text-gray-400">Archived</button>
+                    </div>
+                </div>
+
+                <!-- List of Members with Dynamic Add/Remove/Restore features -->
+                <div id="members-list-container" class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+
+                <!-- Add Student Form with automatic Admission Number preview -->
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xs font-extrabold uppercase text-zumbaOrange"><i class="fas fa-user-plus mr-1.5"></i> Register New Student</h4>
+                        <span id="next-admission-id" class="text-[10px] text-zumbaPink font-bold uppercase tracking-wider bg-zumbaPink/10 px-2 py-0.5 rounded border border-zumbaPink/20">Next ID: SZ-1004</span>
+                    </div>
+                    <div class="space-y-2">
+                        <input type="text" id="new-member-name" placeholder="Full Name" class="w-full bg-zumbaDark border border-white/5 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zumbaPink">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="new-member-phone" placeholder="Phone (e.g. 0776047714)" class="w-full bg-zumbaDark border border-white/5 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-zumbaPink">
+                            <select id="new-member-status" class="bg-zumbaDark border border-white/5 rounded-xl px-3 py-2 text-xs text-gray-300 focus:outline-none focus:border-zumbaPink">
+                                <option value="Newcomer">Newcomer</option>
+                                <option value="Active Member">Active Member</option>
+                            </select>
+                        </div>
+                        <button onclick="addNewMember()" class="w-full bg-gradient-to-r from-zumbaPink to-zumbaOrange text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md">
+                            Register & Save
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 7. PAYMENTS GATEWAY
+                 ========================================================= -->
+            <section id="page-payments" class="hidden space-y-4">
+                <div>
+                    <h3 class="text-xl font-black">Membership Plans</h3>
+                    <p class="text-xs text-gray-400">Choose and pay for membership packages.</p>
+                </div>
+
+                <!-- Admission Fee Card -->
+                <div class="bg-gradient-to-r from-zumbaPurple to-zumbaPink p-4 rounded-3xl relative overflow-hidden text-center shadow-lg neon-pink-glow">
+                    <span class="bg-zumbaOrange text-white text-[8px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Admission Fee</span>
+                    <h2 class="text-3xl font-black mt-2 text-white">Rs. 1,000/=</h2>
+                    <p class="text-[10px] text-purple-100 mt-1">One-time enrollment registration fee.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 flex flex-col justify-between text-center relative">
+                        <span class="absolute -top-2 left-4 bg-zumbaPink text-white text-[8px] px-2 py-0.5 rounded font-black uppercase">Monthly</span>
+                        <h4 class="text-[10px] font-bold uppercase text-gray-400">Zumba Pass</h4>
+                        <h3 class="text-lg font-black text-white my-2">Rs. 4,000</h3>
+                        <button onclick="processMembershipPayment('Monthly Premium')" class="bg-zumbaPink text-white text-[10px] font-bold py-2 rounded-xl">Purchase</button>
+                    </div>
+
+                    <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 flex flex-col justify-between text-center">
+                        <h4 class="text-[10px] font-bold uppercase text-gray-400">One-Day Pass</h4>
+                        <h3 class="text-lg font-black text-white my-2">Rs. 1,000</h3>
+                        <button onclick="processMembershipPayment('One Day Pass')" class="bg-white/10 hover:bg-zumbaOrange text-white text-[10px] font-bold py-2 rounded-xl transition-all">Purchase</button>
+                    </div>
+                </div>
+
+                <!-- Google Form Link -->
+                <div class="pt-2">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdreQfZ1fOBzifgE4OvfaDVpbMIdqRvYSgUh3qzxWzqtuoLeA/viewform?usp=publish-editor" target="_blank" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg animate-pulse hover:scale-105 transition-all">
+                        <i class="fab fa-google"></i>
+                        <span>Fill Admission Google Form</span>
+                    </a>
+                </div>
+
+                <!-- LankaQR Support -->
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+                    <p class="text-xs text-gray-300 font-bold mb-2">Scan & Pay with LankaQR</p>
+                    <div class="bg-white p-2 rounded-xl">
+                        <i class="fas fa-qrcode text-6xl text-zumbaDark"></i>
+                    </div>
+                    <p class="text-[9px] text-gray-500 mt-1 uppercase font-bold">Studio SaZ QR-ID: SZ-7890</p>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 8. PROGRESS TRACKER
+                 ========================================================= -->
+            <section id="page-tracker" class="hidden space-y-4">
+                <div>
+                    <h3 class="text-xl font-black">Progress Tracker</h3>
+                    <p class="text-xs text-gray-400">Log and evaluate physical training workouts.</p>
+                </div>
+
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 space-y-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Workout Duration: <span id="dur-val" class="text-zumbaOrange font-black">45 mins</span></label>
+                        <input type="range" id="slider-duration" min="15" max="90" step="15" value="45" oninput="calculateLiveCalories()" class="w-full accent-zumbaPink bg-zumbaDark h-2 rounded-lg">
+                    </div>
+                    <div class="bg-zumbaDark p-3 rounded-xl text-center">
+                        <span class="text-[10px] text-gray-500 uppercase font-bold">Estimated Burn</span>
+                        <h3 class="text-3xl font-black text-zumbaOrange" id="kcal-calc-text">450 kcal</h3>
+                    </div>
+                    <button onclick="saveCalorieRecord()" class="w-full bg-zumbaPink text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider">
+                        Log Today's Workout
+                    </button>
+                </div>
+
+                <!-- Logs -->
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5">
+                    <h4 class="text-xs font-black uppercase text-zumbaOrange mb-2">Workout History Logs</h4>
+                    <div id="tracker-history-container" class="space-y-1.5 text-xs text-gray-300">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 9. INSTRUCTOR PANEL (Schedule manager, Notifications, Video upload)
+                 ========================================================= -->
+            <section id="page-instructor" class="hidden space-y-4">
+                <div class="bg-gradient-to-r from-zumbaPurple to-purple-900 p-4 rounded-2xl border border-purple-500/30 flex items-center space-x-3">
+                    <div onclick="triggerAvatarSelection()" class="w-12 h-12 rounded-xl overflow-hidden border border-white/20 flex items-center justify-center cursor-pointer group relative">
+                        <img id="instructor-avatar" src="sasani.jpg" class="w-full h-full object-cover" alt="Sasani" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-camera text-[8px] text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-black text-white">Sasani Fernando</h3>
+                        <p class="text-[10px] text-purple-200">Main Instructor Control Deck</p>
+                    </div>
+                </div>
+
+                <!-- Social Media Channel Integrations -->
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-zumbaOrange"><i class="fas fa-share-alt mr-1"></i> Social Media Channels</h4>
+                    <div class="grid grid-cols-2 gap-2 text-center">
+                        <a href="https://web.facebook.com/sasani.fernandon" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-2 transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.tiktok.com/@zin.sasani.fernan" target="_blank" class="bg-slate-800 hover:bg-black text-pink-400 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-2 transition-all">
+                            <i class="fab fa-tiktok"></i>
+                            <span>TikTok</span>
+                        </a>
+                    </div>
+                    <a href="https://wa.me/94776047714" target="_blank" class="w-full bg-green-500/20 hover:bg-green-500/40 text-green-400 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-2 transition-all border border-green-500/30">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Instructor WhatsApp Chat</span>
+                    </a>
+                </div>
+
+                <!-- ADD & REMOVE SCHEDULES (DYNAMIC MANAGER) -->
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-zumbaOrange"><i class="fas fa-calendar-plus mr-1"></i> Add New Class Schedule</h4>
+                    <input type="text" id="new-class-name" placeholder="Class Name (e.g. Night Session)" class="w-full bg-zumbaDark border border-white/5 rounded-xl p-2.5 text-xs focus:outline-none">
+                    <input type="text" id="new-class-time" placeholder="Time (e.g. 07:30 PM - 08:30 PM)" class="w-full bg-zumbaDark border border-white/5 rounded-xl p-2.5 text-xs focus:outline-none">
+                    <button onclick="addNewSchedule()" class="w-full bg-green-600 text-white font-black text-xs py-3 rounded-xl uppercase tracking-wider shadow-lg">
+                        Add to Live Schedule
+                    </button>
+                </div>
+
+                <!-- Broadcast Announcement -->
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-zumbaPink"><i class="fas fa-bullhorn mr-1"></i> Send Announcement Notification</h4>
+                    <input type="text" id="announce-title" placeholder="Notice Heading" class="w-full bg-zumbaDark border border-white/5 rounded-xl p-2.5 text-xs focus:outline-none">
+                    <textarea id="announce-msg" placeholder="Write message summary here..." class="w-full bg-zumbaDark border border-white/5 rounded-xl p-2.5 text-xs h-16 focus:outline-none"></textarea>
+                    <button onclick="broadcastAnnouncement()" class="w-full bg-zumbaPink text-white font-black text-xs py-2 rounded-xl uppercase tracking-wider">
+                        Broadcast To All Users
+                    </button>
+                </div>
+
+                <!-- Upload Video File -->
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-zumbaPink"><i class="fas fa-cloud-upload-alt mr-1"></i> Publish New Video Lesson</h4>
+                    <input type="text" id="vid-title" placeholder="Lesson Title Name" class="w-full bg-zumbaDark border border-white/5 rounded-xl p-2.5 text-xs focus:outline-none">
+                    <input type="text" id="vid-meta" placeholder="Level • Duration (e.g. Intermediate • 30 Mins)" class="w-full bg-zumbaDark border border-white/5 rounded-xl p-2.5 text-xs focus:outline-none">
+                    <button onclick="triggerVideoSelection()" class="w-full bg-brandDark border border-dashed border-zumbaPink/30 hover:border-zumbaPink/100 py-3.5 rounded-xl text-[11px] text-gray-300 font-bold flex items-center justify-center space-x-2 transition-all">
+                        <i class="fas fa-file-video text-lg text-zumbaPink"></i>
+                        <span id="selected-video-filename">Select Video File (.mp4)</span>
+                    </button>
+                    <button onclick="uploadVideoSimulation()" class="w-full bg-gradient-to-r from-zumbaPurple to-zumbaPink text-white font-black text-xs py-3 rounded-xl uppercase tracking-wider">
+                        Publish Lesson to App
+                    </button>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 10. SETTINGS PAGE
+                 ========================================================= -->
+            <section id="page-settings" class="hidden space-y-4">
+                <div>
+                    <h3 class="text-xl font-black">App Settings</h3>
+                    <p class="text-xs text-gray-400">Configure preferences and channels.</p>
+                </div>
+
+                <div class="bg-zumbaCard rounded-2xl border border-white/5 divide-y divide-white/5 text-xs">
+                    <div class="p-4 flex justify-between items-center">
+                        <span>Push Notifications Status</span>
+                        <span class="text-zumbaPink font-bold">Enabled</span>
+                    </div>
+                    <div class="p-4 flex justify-between items-center">
+                        <span>Diet Plans Subscription Info</span>
+                        <span class="text-zumbaOrange font-bold">Active</span>
+                    </div>
+                </div>
+
+                <!-- Integrated Social Media Links in Settings as well -->
+                <div class="bg-zumbaCard p-4 rounded-2xl border border-white/5 mt-4 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-zumbaOrange"><i class="fas fa-share-alt mr-1"></i> Connect With Instructor</h4>
+                    <div class="grid grid-cols-2 gap-2 text-center">
+                        <a href="https://web.facebook.com/sasani.fernandon" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-[10px] flex items-center justify-center space-x-1.5 transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.tiktok.com/@zin.sasani.fernan" target="_blank" class="bg-slate-800 hover:bg-black text-pink-400 font-bold py-2 rounded-xl text-[10px] flex items-center justify-center space-x-1.5 transition-all">
+                            <i class="fab fa-tiktok"></i>
+                            <span>TikTok</span>
+                        </a>
+                    </div>
+                </div>
+
+                <button onclick="showPage('login')" class="w-full bg-red-600/20 text-red-400 font-bold py-3 rounded-xl text-xs border border-red-500/20 mt-4">
+                    Log Out of Account
+                </button>
+            </section>
+
+        </main>
+
+        <!-- Fixed Bottom Application Navigation Bar -->
+        <nav id="app-navbar" class="absolute bottom-0 left-0 right-0 bg-zumbaCard/95 border-t border-white/5 py-3.5 px-4 flex justify-between items-center z-30 rounded-t-3xl hidden">
+            <button id="nav-home" onclick="showPage('home')" class="flex flex-col items-center space-y-1 text-zumbaPink">
+                <i class="fas fa-home text-base"></i> <span class="text-[9px] font-bold">Home</span>
+            </button>
+            <button id="nav-videos" onclick="showPage('videos')" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-white">
+                <i class="fas fa-video text-base"></i> <span class="text-[9px] font-bold">Videos</span>
+            </button>
+            <button id="nav-booking" onclick="showPage('booking')" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-white">
+                <i class="fas fa-calendar-alt text-base"></i> <span class="text-[9px] font-bold">Schedules</span>
+            </button>
+            <button id="nav-members" onclick="showPage('members')" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-white">
+                <i class="fas fa-users text-base"></i> <span class="text-[9px] font-bold">Registry</span>
+            </button>
+            <button id="nav-payments" onclick="showPage('payments')" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-white">
+                <i class="fas fa-wallet text-base"></i> <span class="text-[9px] font-bold">Payments</span>
+            </button>
+            <button id="nav-settings" onclick="showPage('settings')" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-white">
+                <i class="fas fa-cog text-base"></i> <span class="text-[9px] font-bold">Settings</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- Core App Controller Simulation Logic Engine -->
+    <script>
+        // Global State Lists
+        let loggedCaloriesHistory = [
+            { date: "Yesterday", burn: 520, duration: 50 },
+            { date: "2 days ago", burn: 450, duration: 45 }
+        ];
+
+        let uploadedVideosData = [
+            { title: "Latin Beat Rhythm Warmup", meta: "Beginner • 15 Mins • 150 kcal burn", url: "https://www.w3schools.com/html/mov_bbb.mp4", desc: "Start sweating with this light energetic warmup session." },
+            { title: "Zumba Core Stamina Shredding", meta: "Intermediate • 30 Mins • 350 kcal burn", url: "https://www.w3schools.com/html/movie.mp4", desc: "Build core abs and burn maximum calories with high BPM." }
+        ];
+
+        let zumbaTracks = [
+            { name: "Salsa Heat Dance Beat", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", bpm: "130 BPM" },
+            { name: "Reggae Fitness Cardio Bounce", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", bpm: "125 BPM" },
+            { name: "Neon Electro Power Burn", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", bpm: "140 BPM" }
+        ];
+
+        let classSchedules = [
+            { id: 1, type: "On-Site Studio", name: "Monday Night Dance Session", time: "07:30 PM - 08:30 PM", color: "border-zumbaPink", label: "Physical studio" },
+            { id: 2, type: "Live Zoom Room", name: "Tuesday Morning Stretch Workout", time: "08:30 AM - 09:30 AM", color: "border-zumbaPurple", label: "Live zoom stream" }
+        ];
+
+        // Members database with unique admission IDs & status properties
+        let membersData = [
+            { admissionId: "SZ-1001", name: "Asha Dilhani", phone: "0771234567", status: "Active Member", joined: "12 Feb 2026", isArchived: false },
+            { admissionId: "SZ-1002", name: "Nimisha Perera", phone: "0719876543", status: "Active Member", joined: "05 Mar 2026", isArchived: false },
+            { admissionId: "SZ-1003", name: "Kavindi Fernando", phone: "0705551234", status: "Newcomer", joined: "20 May 2026", isArchived: false }
+        ];
+
+        let currentTrackIndex = 0;
+        let newlyUploadedVideoBase64 = "";
+        let currentMemberFilter = 'all';
+
+        // Check stored local cache files on system bootup loading
+        window.onload = function() {
+            applySavedAvatar();
+            renderSchedules();
+            renderMembers();
+            renderVideoLibrary();
+            updateNextAdmissionIdPreview();
+        };
+
+        // Render Dynamic Schedules Booking Screen
+        function renderSchedules() {
+            const container = document.getElementById('booking-list-container');
+            container.innerHTML = classSchedules.map(c => `
+                <div class="bg-zumbaCard p-4 rounded-2xl border-l-4 ${c.color} flex justify-between items-center">
+                    <div>
+                        <span class="text-zumbaOrange text-[9px] font-black uppercase">${c.type}</span>
+                        <h4 class="font-bold text-sm text-white">${c.name}</h4>
+                        <p class="text-[10px] text-gray-400"><i class="far fa-clock mr-1"></i> ${c.time}</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="bookClass('${c.name}')" class="bg-zumbaPink text-white text-[10px] font-bold px-4 py-2 rounded-xl">Book</button>
+                        <button onclick="deleteSchedule(${c.id})" class="text-red-400 hover:text-red-600 text-xs p-2"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add class dynamically from Panel
+        function addNewSchedule() {
+            const name = document.getElementById('new-class-name').value.trim();
+            const time = document.getElementById('new-class-time').value.trim();
+
+            if (!name || !time) {
+                alert("Please fill Class Name and Time fields.");
+                return;
+            }
+
+            const newId = classSchedules.length > 0 ? Math.max(...classSchedules.map(c => c.id)) + 1 : 1;
+            classSchedules.push({
+                id: newId,
+                type: "On-Site Studio",
+                name: name,
+                time: time,
+                color: "border-zumbaOrange",
+                label: "Custom Session Added"
+            });
+
+            renderSchedules();
+            document.getElementById('new-class-name').value = '';
+            document.getElementById('new-class-time').value = '';
+            triggerToast("New class schedule created successfully!");
+        }
+
+        // Delete class dynamically
+        function deleteSchedule(id) {
+            if (confirm("Are you sure you want to remove this schedule slot?")) {
+                classSchedules = classSchedules.filter(c => c.id !== id);
+                renderSchedules();
+                triggerToast("Class schedule removed.");
+            }
+        }
+
+        // Get Next Admission ID dynamically
+        function getNextAdmissionId() {
+            if (membersData.length === 0) return "SZ-1001";
+            const ids = membersData.map(m => parseInt(m.admissionId.split('-')[1]));
+            const maxId = Math.max(...ids);
+            return `SZ-${maxId + 1}`;
+        }
+
+        function updateNextAdmissionIdPreview() {
+            const el = document.getElementById('next-admission-id');
+            if (el) {
+                el.innerText = `Next ID: ${getNextAdmissionId()}`;
+            }
+        }
+
+        // Render dynamic members contact list
+        function renderMembers() {
+            const container = document.getElementById('members-list-container');
+            const searchTerm = document.getElementById('member-search').value.toLowerCase();
+            
+            let filtered = membersData.filter(m => {
+                const matchesSearch = m.name.toLowerCase().includes(searchTerm) || 
+                                      m.phone.includes(searchTerm) || 
+                                      m.admissionId.toLowerCase().includes(searchTerm);
+                if (!matchesSearch) return false;
+
+                if (currentMemberFilter === 'archived') {
+                    return m.isArchived === true;
+                }
+                
+                // Show non-archived items for other standard tabs
+                if (m.isArchived) return false;
+
+                if (currentMemberFilter === 'active') {
+                    return m.status === 'Active Member';
+                } else if (currentMemberFilter === 'newcomer') {
+                    return m.status === 'Newcomer';
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="text-center text-gray-400 text-xs py-8">No matching records found.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(m => {
+                const statusColor = m.status === 'Newcomer' ? 'bg-zumbaOrange text-zumbaDark' : 'bg-zumbaPink text-white';
+                const cleanPhone = m.phone.replace(/[^0-9]/g, '');
+                const waPhone = cleanPhone.startsWith('0') ? '94' + cleanPhone.substring(1) : cleanPhone;
+                
+                // Dynamic action buttons depending on archived states
+                let actionButtons = '';
+                if (m.isArchived) {
+                    actionButtons = `
+                        <button onclick="restoreMember('${m.admissionId}')" title="Restore Student" class="w-8 h-8 rounded-full bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white flex items-center justify-center transition-all shadow">
+                            <i class="fas fa-undo text-xs"></i>
+                        </button>
+                        <button onclick="permanentlyDeleteMember('${m.admissionId}')" title="Delete Permanently" class="w-8 h-8 rounded-full bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white flex items-center justify-center transition-all shadow">
+                            <i class="fas fa-trash-alt text-xs"></i>
+                        </button>
+                    `;
+                } else {
+                    actionButtons = `
+                        <a href="https://wa.me/${waPhone}" target="_blank" title="WhatsApp Chat" class="w-8 h-8 rounded-full bg-green-500/20 hover:bg-green-500/40 text-green-400 flex items-center justify-center transition-all shadow">
+                            <i class="fab fa-whatsapp text-sm"></i>
+                        </a>
+                        <button onclick="archiveMember('${m.admissionId}')" title="Temporary Remove" class="w-8 h-8 rounded-full bg-orange-500/20 hover:bg-orange-500 text-orange-400 hover:text-white flex items-center justify-center transition-all shadow">
+                            <i class="fas fa-user-slash text-xs"></i>
+                        </button>
+                    `;
+                }
+
+                return `
+                    <div class="bg-zumbaCard/60 p-3 rounded-xl border border-white/5 flex justify-between items-center text-xs">
+                        <div class="space-y-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[10px] font-bold text-gray-500">${m.admissionId}</span>
+                                <span class="font-extrabold text-white text-sm">${m.name}</span>
+                                <span class="text-[8px] font-bold px-2 py-0.5 rounded-full uppercase ${statusColor}">${m.status}</span>
+                            </div>
+                            <p class="text-gray-400 text-[10px]">
+                                <i class="fas fa-phone-alt mr-1"></i>${m.phone} • Joined: ${m.joined}
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            ${actionButtons}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Archive member temporarily
+        function archiveMember(admissionId) {
+            const member = membersData.find(m => m.admissionId === admissionId);
+            if (member && confirm(`Are you sure you want to temporarily remove ${member.name} from the active list?`)) {
+                member.isArchived = true;
+                renderMembers();
+                triggerToast(`${member.name} moved to archives.`);
+            }
+        }
+
+        // Restore archived member
+        function restoreMember(admissionId) {
+            const member = membersData.find(m => m.admissionId === admissionId);
+            if (member) {
+                member.isArchived = false;
+                renderMembers();
+                triggerToast(`${member.name} restored to active list successfully!`);
+            }
+        }
+
+        // Permanently delete member
+        function permanentlyDeleteMember(admissionId) {
+            const member = membersData.find(m => m.admissionId === admissionId);
+            if (member && confirm(`Warning! This will permanently delete all records of ${member.name}. Proceed?`)) {
+                membersData = membersData.filter(m => m.admissionId !== admissionId);
+                renderMembers();
+                updateNextAdmissionIdPreview();
+                triggerToast(`${member.name} deleted permanently.`);
+            }
+        }
+
+        // Live filtration logic
+        function filterMembers() {
+            renderMembers();
+        }
+
+        function setMemberFilter(filter) {
+            currentMemberFilter = filter;
+            ['all', 'active', 'newcomer', 'archived'].forEach(f => {
+                const el = document.getElementById(`filter-${f}`);
+                if (f === filter) {
+                    el.className = "flex-1 py-1.5 text-[9px] font-extrabold rounded-lg transition-all bg-zumbaPink text-white";
+                } else {
+                    el.className = "flex-1 py-1.5 text-[9px] font-extrabold rounded-lg transition-all text-gray-400";
+                }
+            });
+            renderMembers();
+        }
+
+        // New member submission logic saving to active list
+        function addNewMember() {
+            const nameInput = document.getElementById('new-member-name');
+            const phoneInput = document.getElementById('new-member-phone');
+            const statusInput = document.getElementById('new-member-status');
+
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
+            const status = statusInput.value;
+
+            if (!name || !phone) {
+                alert("Please fill in both name and phone fields.");
+                return;
+            }
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString([], {day: '2-digit', month: 'short', year: 'numeric'});
+            const admissionId = getNextAdmissionId();
+
+            membersData.push({
+                admissionId: admissionId,
+                name: name,
+                phone: phone,
+                status: status,
+                joined: dateStr,
+                isArchived: false
+            });
+
+            renderMembers();
+            updateNextAdmissionIdPreview();
+
+            nameInput.value = '';
+            phoneInput.value = '';
+            triggerToast(`Student ${name} (${admissionId}) Registered Successfully!`);
+        }
+
+        // Audio Player Controls
+        function triggerSongSelection() {
+            document.getElementById('song-file-input').click();
+        }
+
+        function handleSongUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Audio = e.target.result;
+                    const cleanName = file.name.replace(/\.[^/.]+$/, "");
+                    
+                    const newTrack = {
+                        name: cleanName,
+                        url: base64Audio,
+                        bpm: "Custom Beats Uploaded"
+                    };
+
+                    zumbaTracks.unshift(newTrack);
+                    currentTrackIndex = 0;
+
+                    const audio = document.getElementById('zumba-audio');
+                    audio.src = base64Audio;
+                    document.getElementById('current-track-name').innerText = cleanName;
+                    document.getElementById('current-track-bpm').innerText = "Tempo: Custom Beats Uploaded";
+                    
+                    audio.play();
+                    document.getElementById('audio-play-icon').className = "fas fa-pause";
+                    triggerToast(`🎵 Uploaded & Playing Track: ${cleanName}`);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function toggleAudio() {
+            const audio = document.getElementById('zumba-audio');
+            const playIcon = document.getElementById('audio-play-icon');
+
+            if (audio.paused) {
+                audio.play();
+                playIcon.className = "fas fa-pause";
+            } else {
+                audio.pause();
+                playIcon.className = "fas fa-play ml-0.5";
+            }
+        }
+
+        // Visualizer Sync animations
+        function onAudioPlay() {
+            document.getElementById('music-disc').classList.add('spinning-vinyl');
+            const bars = document.getElementById('music-bars').children;
+            for(let i=0; i<bars.length; i++) {
+                bars[i].classList.add('animate-pulse');
+            }
+            triggerToast("Playing: " + zumbaTracks[currentTrackIndex].name);
+        }
+
+        function onAudioPause() {
+            document.getElementById('music-disc').classList.remove('spinning-vinyl');
+            const bars = document.getElementById('music-bars').children;
+            for(let i=0; i<bars.length; i++) {
+                bars[i].classList.remove('animate-pulse');
+            }
+        }
+
+        function changeTrack(direction) {
+            const audio = document.getElementById('zumba-audio');
+            if (direction === 'next') {
+                currentTrackIndex = (currentTrackIndex + 1) % zumbaTracks.length;
+            } else {
+                currentTrackIndex = (currentTrackIndex - 1 + zumbaTracks.length) % zumbaTracks.length;
+            }
+
+            audio.src = zumbaTracks[currentTrackIndex].url;
+            document.getElementById('current-track-name').innerText = zumbaTracks[currentTrackIndex].name;
+            document.getElementById('current-track-bpm').innerText = `Tempo: ${zumbaTracks[currentTrackIndex].bpm}`;
+            audio.play();
+            document.getElementById('audio-play-icon').className = "fas fa-pause";
+        }
+
+        // Video Player Logic
+        function playVideo(title, url, description) {
+            const audio = document.getElementById('zumba-audio');
+            if(!audio.paused) {
+                audio.pause();
+                document.getElementById('audio-play-icon').className = "fas fa-play ml-0.5";
+            }
+
+            const overlay = document.getElementById('video-overlay-player');
+            const video = document.getElementById('main-app-video');
+            const vidSrc = document.getElementById('video-source');
+
+            document.getElementById('current-playing-title').innerText = title;
+            document.getElementById('current-playing-desc').innerText = description;
+            
+            vidSrc.src = url;
+            video.load();
+            overlay.classList.remove('hidden');
+            video.play();
+        }
+
+        function closeVideoPlayer() {
+            const overlay = document.getElementById('video-overlay-player');
+            const video = document.getElementById('main-app-video');
+            video.pause();
+            overlay.classList.add('hidden');
+        }
+
+        // Video selection
+        function triggerVideoSelection() {
+            document.getElementById('video-file-input').click();
+        }
+
+        function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    newlyUploadedVideoBase64 = e.target.result;
+                    document.getElementById('selected-video-filename').innerText = `Selected: ${file.name}`;
+                    triggerToast("Video file attached & ready!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function uploadVideoSimulation() {
+            const title = document.getElementById('vid-title').value.trim();
+            const meta = document.getElementById('vid-meta').value.trim();
+            
+            if(!title || !meta) { 
+                alert("Please fill Video Title and Meta details."); 
+                return; 
+            }
+
+            const videoUrl = newlyUploadedVideoBase64 || "https://www.w3schools.com/html/mov_bbb.mp4";
+
+            uploadedVideosData.unshift({ 
+                title: title, 
+                meta: meta, 
+                url: videoUrl,
+                desc: "Published custom lesson slot." 
+            });
+
+            renderVideoLibrary();
+            document.getElementById('vid-title').value = '';
+            document.getElementById('vid-meta').value = '';
+            document.getElementById('selected-video-filename').innerText = "Select Video File (.mp4)";
+            newlyUploadedVideoBase64 = "";
+            triggerToast(`🎬 Video Lesson "${title}" published dynamically!`);
+        }
+
+        function renderVideoLibrary() {
+            const container = document.getElementById('video-list-container');
+            container.innerHTML = uploadedVideosData.map(v => `
+                <div onclick="playVideo('${v.title}', '${v.url}', '${v.desc || ''}')" class="bg-zumbaCard rounded-2xl overflow-hidden border border-white/5 cursor-pointer hover:bg-zumbaCard/80 transition-all">
+                    <div class="h-36 bg-gradient-to-r from-purple-900 to-pink-900 flex items-center justify-center text-xl font-black text-white relative">
+                        <i class="fas fa-play-circle text-4xl opacity-80 hover:opacity-100 transition-opacity"></i>
+                        <span class="absolute top-2 left-2 bg-zumbaOrange text-white text-[8px] font-bold px-2 py-0.5 rounded uppercase">Click to Play</span>
+                    </div>
+                    <div class="p-3">
+                        <h4 class="text-xs font-bold text-white">${v.title}</h4>
+                        <p class="text-[10px] text-gray-400 mt-0.5">${v.meta}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Avatar Image handling
+        function triggerAvatarSelection() {
+            document.getElementById('avatar-file-input').click();
+        }
+
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    localStorage.setItem('studio_saz_avatar', base64Image);
+                    applySavedAvatar();
+                    triggerToast("Profile photo synchronized!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function applySavedAvatar() {
+            const savedAvatar = localStorage.getItem('studio_saz_avatar');
+            if (savedAvatar) {
+                const avatarIds = ['splash-avatar', 'user-avatar-main', 'instructor-avatar'];
+                avatarIds.forEach(id => {
+                    const img = document.getElementById(id);
+                    if (img) {
+                        img.src = savedAvatar;
+                    }
+                });
+            }
+        }
+
+        // Navigation Tab Page Switch Logic
+        function showPage(pageId) {
+            const pages = ['login', 'home', 'videos', 'booking', 'members', 'payments', 'tracker', 'instructor', 'settings'];
+            pages.forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                if(el) el.classList.add('hidden');
+            });
+
+            const activePage = document.getElementById(`page-${pageId}`);
+            if(activePage) activePage.classList.remove('hidden');
+
+            const navMap = {
+                'home': 'nav-home',
+                'videos': 'nav-videos',
+                'booking': 'nav-booking',
+                'members': 'nav-members',
+                'payments': 'nav-payments',
+                'settings': 'nav-settings'
+            };
+
+            Object.keys(navMap).forEach(key => {
+                const navBtn = document.getElementById(navMap[key]);
+                if(navBtn) {
+                    if(key === pageId) {
+                        navBtn.classList.remove('text-gray-400');
+                        navBtn.classList.add('text-zumbaPink');
+                    } else {
+                        navBtn.classList.remove('text-zumbaPink');
+                        navBtn.classList.add('text-gray-400');
+                    }
+                }
+            });
+
+            if(pageId === 'videos') { renderVideoLibrary(); }
+            if(pageId === 'tracker') { renderTrackerHistory(); }
+        }
+
+        function dismissSplash() {
+            document.getElementById('page-splash').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('app-header').classList.remove('hidden');
+            document.getElementById('main-app-content').classList.remove('hidden');
+            document.getElementById('app-navbar').classList.remove('hidden');
+            showPage('login');
+        }
+
+        function triggerToast(message) {
+            const toast = document.getElementById('app-toast');
+            document.getElementById('toast-msg').innerText = message;
+            toast.classList.remove('-translate-y-96');
+            toast.classList.add('translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0');
+                toast.classList.add('-translate-y-96');
+            }, 4000);
+        }
+
+        function handleRegistration() {
+            const name = document.getElementById('login-name').value.trim();
+            if(!name) { alert("Please input profile name."); return; }
+            document.getElementById('header-user-name').innerText = name;
+            
+            const badge = document.getElementById('header-user-badge');
+            if (name.toLowerCase().includes("sasani") || name.toLowerCase().includes("instructor")) {
+                badge.innerHTML = `<i class="fas fa-award mr-1"></i> ZIN™ Certified Instructor`;
+            } else {
+                badge.innerHTML = `<i class="fas fa-bolt mr-1"></i> Streak: 1 Day (Fitness Enthusiast)`;
+            }
+
+            triggerToast(`Welcome back, ${name}!`);
+            showPage('home');
+        }
+
+        function simulateSocialLogin(provider) {
+            triggerToast(`Connected securely via ${provider}!`);
+            showPage('home');
+        }
+
+        function bookClass(className) {
+            triggerToast(`Success! Reserved spot for: ${className}. Notification alert set!`);
+        }
+
+        function processMembershipPayment(planName) {
+            triggerToast(`Secure checkout initiated for: ${planName}... Success!`);
+        }
+
+        function calculateLiveCalories() {
+            const minutes = parseInt(document.getElementById('slider-duration').value);
+            document.getElementById('dur-val').innerText = `${minutes} mins`;
+            const computedKcal = minutes * 10;
+            document.getElementById('kcal-calc-text').innerText = `${computedKcal} kcal`;
+        }
+
+        function saveCalorieRecord() {
+            const minutes = parseInt(document.getElementById('slider-duration').value);
+            const computedKcal = minutes * 10;
+            
+            loggedCaloriesHistory.unshift({
+                date: "Just Now",
+                burn: computedKcal,
+                duration: minutes
+            });
+            
+            document.getElementById('home-kcal-display').innerText = `${computedKcal} kcal`;
+            renderTrackerHistory();
+            triggerToast("Workout stats recorded!");
+        }
+
+        function renderTrackerHistory() {
+            const container = document.getElementById('tracker-history-container');
+            container.innerHTML = loggedCaloriesHistory.map(h => `
+                <div class="bg-zumbaDark/60 p-2.5 rounded-xl border border-white/5 flex justify-between items-center">
+                    <span class="text-gray-400 font-medium">${h.date} (${h.duration} mins)</span>
+                    <span class="text-zumbaOrange font-extrabold">${h.burn} Kcal</span>
+                </div>
+            `).join('');
+        }
+
+        function broadcastAnnouncement() {
+            const title = document.getElementById('announce-title').value.trim();
+            const msg = document.getElementById('announce-msg').value.trim();
+            if(!title || !msg) { alert("Please complete notice entry forms."); return; }
+
+            triggerToast(`🔔 Broadcast Issued: ${title}`);
+            document.getElementById('announce-title').value = '';
+            document.getElementById('announce-msg').value = '';
+        }
+    </script>
+</body>
+</html>
